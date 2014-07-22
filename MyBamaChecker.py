@@ -15,28 +15,29 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
-import time, re, json
+import sys, time, re, json
 
 # constants
-USERNAME = "mwleeds"
-PASSWORD = "Imd1wS7w"
+USERNAME = sys.argv[1]
+PASSWORD = sys.argv[2]
 DB_FILE = "classes.db"
 
 class MyBamaChecker():
 
     def __init__(self):
-        # load the page
-        self.driver = webdriver.Firefox()
+        # load the p<F4>age
+        # self.driver = webdriver.Firefox()
+        self.driver = webdriver.Remote("http://127.0.0.1:4444/wd/hub", webdriver.DesiredCapabilities.HTMLUNITWITHJS)
         self.driver.implicitly_wait(30)
         self.driver.get("https://mybama.ua.edu/cp/home/displaylogin")
         # log in
-        self.driver.find_element_by_id("user").clear()
-        self.driver.find_element_by_id("user").send_keys(USERNAME)
-        self.driver.find_element_by_name("pass").clear()
-        self.driver.find_element_by_name("pass").send_keys(PASSWORD)
-        self.driver.find_element_by_link_text("Sign In").click()
+        self.driver.find_element(By.ID, "user").clear()
+        self.driver.find_element(By.ID, "user").send_keys(USERNAME)
+        self.driver.find_element(By.NAME, "pass").clear()
+        self.driver.find_element(By.NAME, "pass").send_keys(PASSWORD)
+        self.driver.find_element(By.LINK_TEXT, "Sign In").click()
         # Click on "Look up classes"
-        self.driver.find_element_by_link_text("Look up classes").click()
+        self.driver.find_element(By.LINK_TEXT, "Look up classes").click()
         self.driver.switch_to.frame("content")
     
     def select_term(self, term):
@@ -80,7 +81,6 @@ class MyBamaChecker():
         for table in tables:
             if table.text != "":
                 subject = table.find_element(By.XPATH, "./tbody/tr[2]/th")
-                print subject.text
                 sections = subject.find_elements(By.XPATH, "../../tr[position()>2]")
                 listOfSections = []
                 for section in sections:
