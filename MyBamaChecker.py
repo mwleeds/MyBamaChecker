@@ -85,6 +85,7 @@ class MyBamaChecker(object):
                 termDict[subject.text] = listOfSections
         outFile = open(filename, 'w')
         json.dump(termDict, outFile)
+        outFile.write("\n")
         outFile.close()
 
     def __del__(self):
