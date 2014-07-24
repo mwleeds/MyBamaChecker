@@ -3,10 +3,11 @@
 ###################################################################
 # 
 # File: myBamaChecker.py
-# Last Edit: 7.21.14
+# Last Edit: 7.24.14
 # Author: Matthew Leeds
-# Purpose: Log in to mybama.ua.edu and check class registration
-# information automatically.
+# Parameters(2): username password
+# Purpose: Class used to log in to mybama.ua.edu and check class registration
+# information automatically. Assumes a Selenium Server is running.
 # 
 ###################################################################
 
@@ -14,27 +15,23 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.common.exceptions import NoSuchElementException
-import sys, time, re, json
+import sys, time, json
 
-# constants
-USERNAME = sys.argv[1]
-PASSWORD = sys.argv[2]
-DB_FILE = "classes.db"
+class MyBamaChecker(object):
 
-class MyBamaChecker():
-
-    def __init__(self):
-        # load the p<F4>age
+    def __init__(self, username, password):
+        # load the page
         # self.driver = webdriver.Firefox()
-        self.driver = webdriver.Remote("http://127.0.0.1:4444/wd/hub", webdriver.DesiredCapabilities.HTMLUNITWITHJS)
+        self.driver = webdriver.Remote("http://127.0.0.1:4444/wd/hub", DesiredCapabilities.HTMLUNITWITHJS)
         self.driver.implicitly_wait(30)
         self.driver.get("https://mybama.ua.edu/cp/home/displaylogin")
         # log in
         self.driver.find_element(By.ID, "user").clear()
-        self.driver.find_element(By.ID, "user").send_keys(USERNAME)
+        self.driver.find_element(By.ID, "user").send_keys(username)
         self.driver.find_element(By.NAME, "pass").clear()
-        self.driver.find_element(By.NAME, "pass").send_keys(PASSWORD)
+        self.driver.find_element(By.NAME, "pass").send_keys(password)
         self.driver.find_element(By.LINK_TEXT, "Sign In").click()
         # Click on "Look up classes"
         self.driver.find_element(By.LINK_TEXT, "Look up classes").click()
@@ -69,7 +66,7 @@ class MyBamaChecker():
                 if row.find_element(By.XPATH, "./*[5]").text == section:
                     return row.find_element(By.XPATH, "./*[13]").text
 
-    def update_db(self):
+    def update_db(self, filename):
         # Scrapes course and section data for all subjects in the current term,
         # and outputs that data to a file in json format.
         termDict = {}
@@ -86,20 +83,10 @@ class MyBamaChecker():
                 for section in sections:
                     listOfSections.append(section.text)
                 termDict[subject.text] = listOfSections
-        outFile = open(DB_FILE, 'w')
+        outFile = open(filename, 'w')
         json.dump(termDict, outFile)
         outFile.close()
 
     def __del__(self):
         self.driver.quit()
 
-def main():
-    spider = MyBamaChecker()
-    spider.select_term("Fall 2014")
-    spider.update_db()
-    '''spider.select_subject("CS-Computer Science")
-    spider.select_course("102")
-    print spider.get_section_avail("005")'''
-
-if __name__=="__main__":
-    main()
