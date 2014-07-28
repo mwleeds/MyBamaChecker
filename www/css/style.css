@@ -1,0 +1,43 @@
+/* File: style.css
+ * Author: Matthew Leeds
+ * Last Edit: 7.28.2014
+ */
+
+body {
+    background-color: #3F444B;
+    color: white;
+    font-family: Garamond;
+}
+
+#content {
+    width: 70%;
+    margin: 0px 50px;
+}
+
+.headerpic {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#notes {
+    text-align: center;
+}
+
+#intro {
+    position: absolute;
+    top: 100px;
+    left: 430px;
+    height: 300px;
+    width: 400px;
+}
+
+#inputform {
+    text-align: center;
+}
+
+#formdiv {
+    position: absolute;
+    top: 280px;
+    left: 430px;
+}
