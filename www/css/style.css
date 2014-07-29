@@ -3,15 +3,20 @@
  * Last Edit: 7.28.2014
  */
 
+html {
+    font-family: Garamond, Georgia;
+}
+
 body {
     background-color: #3F444B;
     color: white;
-    font-family: Garamond;
+    margin: 0px 50px;
 }
 
 #content {
     width: 70%;
-    margin: 0px 50px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .headerpic {
@@ -27,17 +32,14 @@ body {
 #intro {
     position: absolute;
     top: 100px;
-    left: 430px;
+    left: 540px;
     height: 300px;
     width: 400px;
-}
-
-#inputform {
-    text-align: center;
 }
 
 #formdiv {
     position: absolute;
     top: 280px;
-    left: 430px;
+    left: 540px;
 }
+
