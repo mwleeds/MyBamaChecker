@@ -15,7 +15,7 @@ function main() {
             addSubjects();
         }
     });
-    $('#inputform').submit(function(event) {//TODO});
+    $('#inputform').submit(function(event) {/*TODO*/});
 
 }
 
