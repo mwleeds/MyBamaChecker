@@ -8,19 +8,14 @@ html {
 }
 
 body {
+    background: url('http://www.mwleeds.com/ua_background2.jpg') no-repeat center;
     background-color: #3F444B;
     color: white;
-    margin: 0px 50px;
 }
 
 #content {
-    width: 70%;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.headerpic {
-    display: block;
+    width: 500px;
+    height: 400px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -30,16 +25,19 @@ body {
 }
 
 #intro {
-    position: absolute;
-    top: 20%;
-    left: 40%;
-    height: 300px;
+    position: relative;
+    top: 0;
+    left: 30%;
+    height: 200px;
     width: 400px;
 }
 
 #formdiv {
-    position: absolute;
-    top: 54%;
-    left: 39%;
+    position: relative;
+    top: 0;
+    left: 20%;
 }
 
+#container {
+    margin-top: 6em;
+}
