@@ -43,11 +43,7 @@ class MyBamaChecker(object):
     def select_term(self, term):
         # takes a term (such as "Fall 2014") as input, 
         # selects it, and submits the form
-        #self.driver.find_element(By.ID, "term_input_id").click()
-        #self.driver.switch_to.frame("content")
         Select(self.driver.find_element(By.ID, "term_input_id")).select_by_value("201440")
-        #Select(self.driver.find_element(By.ID, "term_input_id")).select_by_visible_text(term)
-        #self.driver.find_element(By.XPATH, "//*[@id='term_input_id']/option[2]").click()
         self.driver.find_element(By.CSS_SELECTOR, "div.pagebodydiv > form > input[type='submit']").click()
 
     def select_subject(self, subject):
