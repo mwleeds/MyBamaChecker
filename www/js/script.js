@@ -1,7 +1,7 @@
 /* 
  * File: script.js
  * Author: Matthew Leeds
- * Last Edit: 7.31.2014
+ * Last Edit: 8.02.2014
  */
 
 var courseData;
@@ -10,13 +10,28 @@ var course;
 var section; 
 
 function main() {
-    $.ajax({ url: "classes.json", success: function(data) {
+    $.ajax({ url: "fall2014.json", success: function(data) {
             courseData = data;
             addSubjects();
         }
     });
-    $('#inputform').submit(function(event) {/*TODO*/});
-
+    $('#inputform').submit(function(event) {
+        $.ajax({
+            url: 'callpython.php',
+            type: 'POST',
+            dataType: 'json',
+            data: { 'username': $('#username').val(),
+                    'password': $('#password').val(),
+                    'term': $('#termsSelect').val(),
+                    'subject': $('#subjectsSelect').val(),
+                    'course': $('#coursesSelect').val(),
+                    'section': $('#sectionsSelect').val()
+                  }, 
+            success: function(response) {
+                console.log(response);
+                }
+            });
+        });
 }
 
 // populate a dropdown with Subjects 

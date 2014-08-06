@@ -2,7 +2,7 @@
 
 ###################################################################
 # File: GetSectionAvail.py
-# Last Edit: 7.24.14
+# Last Edit: 8.02.14
 # Author: Matthew Leeds
 # Parameter(6): username password term subject course section
 # Purpose: Return the number of spots open for a specified course
@@ -21,12 +21,12 @@ COURSE = sys.argv[5] # "102" for example
 SECTION = sys.argv[6] # "005" for example
 
 def main():
-    spider = MyBamaChecker(USERNAME, PASSWORD)
+    spider = MyBamaChecker()
+    spider.login(USERNAME, PASSWORD)
     spider.select_term(TERM)
     spider.select_subject(SUBJECT)
     spider.select_course(COURSE)
-    print spider.get_section_avail(SECTION)
-    return
+    return spider.get_section_avail(SECTION)
 
 if __name__=="__main__":
     main()
