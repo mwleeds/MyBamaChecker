@@ -25,11 +25,13 @@ def main():
     try:
         spider.login(USERNAME, PASSWORD)
     except Exception as e:
-        return e
+        print e
+        return
     spider.select_term(TERM)
     spider.select_subject(SUBJECT)
     spider.select_course(COURSE)
-    return spider.get_section_avail(SECTION)
+    print spider.get_section_avail(SECTION)
+    return
 
 if __name__=="__main__":
     main()

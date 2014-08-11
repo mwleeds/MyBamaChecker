@@ -15,7 +15,8 @@ function main() {
             addSubjects();
         }
     });
-    $('#inputform').submit(function(event) {
+    $('form').submit(function(event) {
+        console.log("Checking myBama...");
         $.ajax({
             url: 'callpython.php',
             type: 'POST',
@@ -24,13 +25,15 @@ function main() {
                     'password': $('#password').val(),
                     'term': $('#termsSelect').val(),
                     'subject': $('#subjectsSelect').val(),
-                    'course': $('#coursesSelect').val(),
+                    'course': $('#coursesSelect').val().substr(0,3),
                     'section': $('#sectionsSelect').val()
                   }, 
             success: function(response) {
                 console.log(response);
+                $('#result').empty().append("<p>" + response + "<br></p>");
                 }
             });
+        return false;
         });
 }
 
