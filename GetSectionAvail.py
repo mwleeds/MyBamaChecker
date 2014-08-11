@@ -22,7 +22,10 @@ SECTION = sys.argv[6] # "005" for example
 
 def main():
     spider = MyBamaChecker()
-    spider.login(USERNAME, PASSWORD)
+    try:
+        spider.login(USERNAME, PASSWORD)
+    except Exception as e:
+        return e
     spider.select_term(TERM)
     spider.select_subject(SUBJECT)
     spider.select_course(COURSE)

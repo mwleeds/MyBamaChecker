@@ -36,6 +36,8 @@ class MyBamaChecker(object):
         self.driver.find_element(By.NAME, "pass").clear()
         self.driver.find_element(By.NAME, "pass").send_keys(password)
         self.driver.find_element(By.LINK_TEXT, "Sign In").click()
+        if "Failed Login" in self.driver.page_source:
+            raise Exception("ERROR: Invalid login credentials.")
         # Click on "Look up classes"
         self.driver.find_element(By.LINK_TEXT, "Look up classes").click()
         self.driver.switch_to.frame("content")
