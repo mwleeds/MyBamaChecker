@@ -24,8 +24,8 @@ import sys, time, json
 class MyBamaChecker(object):
 
     def __init__(self):
-        self.driver = webdriver.Firefox()
-        #self.driver = webdriver.Remote("http://127.0.0.1:4444/wd/hub", DesiredCapabilities.HTMLUNITWITHJS)
+        #self.driver = webdriver.Firefox()
+        self.driver = webdriver.Remote("http://127.0.0.1:4444/wd/hub", DesiredCapabilities.HTMLUNITWITHJS)
         self.driver.implicitly_wait(30)
 
     def login(self, username, password):
@@ -38,6 +38,7 @@ class MyBamaChecker(object):
         self.driver.find_element(By.LINK_TEXT, "Sign In").click()
         if "Failed Login" in self.driver.page_source:
             raise Exception("ERROR: Invalid login credentials.")
+            return
         # Click on "Look up classes"
         self.driver.find_element(By.LINK_TEXT, "Look up classes").click()
         self.driver.switch_to.frame("content")
