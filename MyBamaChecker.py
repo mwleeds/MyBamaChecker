@@ -12,6 +12,10 @@
 # 
 ###################################################################
 
+import sys
+import time
+import json
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -19,7 +23,6 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.common.exceptions import NoSuchElementException
-import sys, time, json
 
 class MyBamaChecker(object):
 
@@ -46,7 +49,7 @@ class MyBamaChecker(object):
     def select_term(self, term):
         # takes a term (such as "Fall 2014") as input, 
         # selects it, and submits the form
-        Select(self.driver.find_element(By.ID, "term_input_id")).select_by_value("201440")
+        Select(self.driver.find_element(By.ID, "term_input_id")).select_by_visible_text(term)
         self.driver.find_element(By.CSS_SELECTOR, "div.pagebodydiv > form > input[type='submit']").click()
 
     def select_subject(self, subject):
