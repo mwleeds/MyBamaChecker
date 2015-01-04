@@ -1,9 +1,9 @@
-#!/usr/bin/python2.7
+#!/usr/bin/python3
 
 ###################################################################
 # 
 # File: MyBamaChecker.py
-# Last Edit: 7.31.14
+# Last Edit: 2015-01-03
 # Author: Matthew Leeds
 # Purpose: Class used to log in to mybama.ua.edu and check class 
 # registration information automatically. Assumes selenium is 
@@ -75,8 +75,11 @@ class MyBamaChecker(object):
     def update_db(self, username, password, term, filename):
         # Scrapes course and section data for all subjects in the current term,
         # and outputs that data to a file in json format.
-        outFile = open(filename, 'r+')
-        loadedDict = json.load(outFile) # in case a previous try failed part way
+        outFile = open(filename, 'w+')
+        try:
+            loadedDict = json.load(outFile) # in case a previous try failed part way
+        except ValueError: # empty file
+            loadedDict = {}
         outFile.close()
         stay = True
         while stay: # while there are subjects left to scrape
@@ -90,9 +93,16 @@ class MyBamaChecker(object):
             self.driver.find_element(By.NAME, "SUB_BTN").click()
             self.driver.switch_to_default_content()
             self.driver.switch_to.frame("content")
-            thisTable = self.driver.find_element(By.XPATH, "//div[@class='pagebodydiv']/table[@class='datadisplaytable' and position()=2]")
+            #print(self.driver.page_source)
+            try:
+                thisTable = self.driver.find_element(By.XPATH, "//div[@class='pagebodydiv']/table[@class='datadisplaytable' and position()=2]")
+            except NoSuchElementException:
+                f = open('dump.html', 'w+')
+                f.write(self.driver.page_source)
+                f.close()
+                raise
             subjectName = thisTable.find_element(By.XPATH, "./tbody/tr[2]/th").text
-            #print "subject: " + subjectName
+            print("subject: " + subjectName)
             courses = thisTable.find_elements(By.XPATH, "./tbody/tr[position()>2]")
             numCourses = len(courses)
             coursesDict = {} # to hold courses and sections in a subject
@@ -102,16 +112,16 @@ class MyBamaChecker(object):
                 thisSubject = self.driver.find_element(By.XPATH, "//div[@class='pagebodydiv']/table[@class='datadisplaytable' and position()=2]")
                 course = thisSubject.find_element(By.XPATH, "./tbody/tr[position()=" + str(j) + "]")
                 courseName = course.text
-                #print courseName
+                print(courseName)
                 courseSections = []
                 course.find_element(By.XPATH, "./td[3]/form/input[@type='submit']").click()
                 rows = self.driver.find_elements(By.XPATH, "//div[@class='pagebodydiv']/form/table[@class='datadisplaytable']/tbody/tr[position()>2]")
                 for row in rows:
                     # append each section number to the list
                     section = row.find_element(By.XPATH, "./td[5]").text
-                    if section.strip() != "":
+                    if len(section) > 0:
                         courseSections.append(section)
-                #print courseSections
+                print(courseSections)
                 coursesDict[courseName] = courseSections
                 self.driver.back()
             loadedDict[subjectName] = coursesDict
@@ -120,7 +130,7 @@ class MyBamaChecker(object):
             outFile.write("\n")
             outFile.close()
             # log out and back in to prevent a time-out
-            #print "relogging"
+            #print("relogging")
             self.driver.switch_to_default_content()
             self.driver.switch_to.frame("nav")
             self.driver.find_element(By.XPATH, "/html/body/table/tbody/tr[1]/td/table[2]/tbody/tr[2]/td[11]/a/img").click()
