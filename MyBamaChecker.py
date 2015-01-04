@@ -122,7 +122,7 @@ class MyBamaChecker(object):
                 for row in rows:
                     # append each section number to the list
                     section = row.find_element(By.XPATH, "./td[5]").text
-                    if len(section) > 0:
+                    if len(section.strip()) > 0:
                         courseSections.append(section)
                 print(courseSections)
                 coursesDict[courseName] = courseSections
