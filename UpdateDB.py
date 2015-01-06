@@ -1,8 +1,8 @@
-#!/usr/bin/python2.7
+#!/usr/bin/python3
 
 ##########################################################################
 # File: UpdateDB.py
-# Last Edit: 7.31.2014
+# Last Edit: 2015-01-03
 # Author: Matthew Leeds
 # Parameters(4): username password term dbfile
 # Purpose: Update the database file with the names of every course in
@@ -16,7 +16,7 @@ import sys
 USERNAME = sys.argv[1]
 PASSWORD = sys.argv[2]
 TERM = sys.argv[3] # "Fall 2014" for example
-DB_FILE = sys.argv[4] # "classes.db" for example
+DB_FILE = sys.argv[4] # "classes.json" for example
 
 def main():
     spider = MyBamaChecker()

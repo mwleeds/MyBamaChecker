@@ -1,12 +1,13 @@
-#!/usr/bin/python2.7
+#!/usr/bin/python3
 
 ###################################################################
 # File: GetSectionAvail.py
-# Last Edit: 8.02.14
+# Last Edit: 2015-01-03
 # Author: Matthew Leeds
 # Parameter(6): username password term subject course section
 # Purpose: Return the number of spots open for a specified course
 # and section using Alabama's registration system.
+#
 ###################################################################
 
 from MyBamaChecker import MyBamaChecker
@@ -21,16 +22,16 @@ COURSE = sys.argv[5] # "102" for example
 SECTION = sys.argv[6] # "005" for example
 
 def main():
-    spider = MyBamaChecker()
+    crawler = MyBamaChecker()
     try:
-        spider.login(USERNAME, PASSWORD)
+        crawler.login(USERNAME, PASSWORD)
     except Exception as e:
-        print e
+        print(e)
         return
-    spider.select_term(TERM)
-    spider.select_subject(SUBJECT)
-    spider.select_course(COURSE)
-    print spider.get_section_avail(SECTION)
+    crawler.select_term(TERM)
+    crawler.select_subject(SUBJECT)
+    crawler.select_course(COURSE)
+    print(crawler.get_section_avail(SECTION))
     return
 
 if __name__=="__main__":
