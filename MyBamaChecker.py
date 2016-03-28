@@ -42,19 +42,29 @@ class MyBamaChecker(object):
         if "Failed Login" in self.driver.page_source:
             raise Exception("ERROR: Invalid login credentials.")
             return
+
+    def click_look_up_classes(self):
         # Click on "Look up classes"
         self.driver.find_element(By.LINK_TEXT, "Look up classes").click()
         self.driver.switch_to.frame("content")
-    
-    def select_term(self, term):
-        # takes a term (such as "Fall 2014") as input, 
-        # selects it, and submits the form
+
+    def click_add_or_drop_classes(self):
+        # Click on "Add or drop classes"
+        self.driver.find_element(By.LINK_TEXT, "Add or drop classes").click()
+        self.driver.switch_to.frame("content")
+
+    def select_term_search(self, term):
+        # takes a term (such as "Fall 2014") as input, selects it, and submits the form
         Select(self.driver.find_element(By.ID, "term_input_id")).select_by_visible_text(term)
         self.driver.find_element(By.CSS_SELECTOR, "div.pagebodydiv > form > input[type='submit']").click()
 
+    def select_term_registration(self, term):
+        # takes a term (such as "Fall 2014") as input, selects it, and submits the form
+        Select(self.driver.find_element(By.ID, "term_id")).select_by_visible_text(term)
+        self.driver.find_element(By.CSS_SELECTOR, "div.pagebodydiv > form > input[type='submit']").click()
+
     def select_subject(self, subject):
-        # takes a subject (such as "CS-Computer Science") as input, 
-        # selects it, and submits the form
+        # takes a subject (such as "CS-Computer Science") as input, selects it, and submits the form
         Select(self.driver.find_element(By.ID, "subj_id")).select_by_visible_text(subject)
         self.driver.find_element(By.NAME, "SUB_BTN").click()
 
@@ -74,6 +84,16 @@ class MyBamaChecker(object):
             if row.find_element(By.XPATH, "./*[1]").get_attribute("class") == "dddefault":
                 if row.find_element(By.XPATH, "./*[5]").text == section:
                     return row.find_element(By.XPATH, "./*[13]").text
+
+    def register_for_CRNs(self, CRNs):
+        # CRNs should be an iterable containing CRNs as strings.
+        # They'll all be put into the Add Classes Worksheet and submitted.
+        crn_table = self.driver.find_element(By.XPATH, "//table[@summary=\"Add Classes Data Entry\"]")
+        for i, crn in enumerate(CRNs):
+            input_box = crn_table.find_element(By.ID, "crn_id" + str(i+1))
+            input_box.send_keys(crn)
+        self.driver.find_element(By.XPATH, "//input[@value=\"Submit Changes\"]").click()
+	sleep(2)
 
     def update_db(self, username, password, term, filename):
         # Scrapes course and section data for all subjects in the current term,

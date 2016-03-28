@@ -28,7 +28,8 @@ def main():
     except Exception as e:
         print(e)
         return
-    crawler.select_term(TERM)
+    crawler.click_look_up_classes()
+    crawler.select_term_search(TERM)
     crawler.select_subject(SUBJECT)
     crawler.select_course(COURSE)
     print(crawler.get_section_avail(SECTION))
