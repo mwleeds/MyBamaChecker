@@ -4,6 +4,8 @@
 # Purpose: Register for all the classes specified by the Course
 # Registration Numbers passed on the command line.
 
+__author__='mwleeds'
+
 from MyBamaChecker import MyBamaChecker
 import sys
 

@@ -1,21 +1,16 @@
 #!/usr/bin/python3
 
-###################################################################
-# 
-# File: MyBamaChecker.py
-# Last Edit: 2015-01-03
-# Author: Matthew Leeds
 # Purpose: Class used to log in to mybama.ua.edu and check class 
 # registration information automatically. Assumes selenium is 
 # installed and a selenium server is running if you want to use 
-# an htmlunit instead of FF/Chrome.
-# 
-###################################################################
+# an htmlunit instead of FF/Chrome. To get a selenium server
+# instance going run "java -jar selenium-server-standalone-....jar"
+
+__author__='mwleeds'
 
 import sys
 import time
 import json
-
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys

@@ -1,14 +1,10 @@
 #!/usr/bin/python3
 
-###################################################################
-# File: GetSectionAvail.py
-# Last Edit: 2015-01-03
-# Author: Matthew Leeds
-# Parameter(6): username password term subject course section
-# Purpose: Return the number of spots open for a specified course
+# Usage: $ python3 GetSectionAvail.py username password term subject course section
+# Purpose: Print the number of spots open for a specified course
 # and section using Alabama's registration system.
-#
-###################################################################
+
+__author__='mwleeds'
 
 from MyBamaChecker import MyBamaChecker
 import sys
