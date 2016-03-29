@@ -88,7 +88,7 @@ class MyBamaChecker(object):
             input_box = crn_table.find_element(By.ID, "crn_id" + str(i+1))
             input_box.send_keys(crn)
         self.driver.find_element(By.XPATH, "//input[@value=\"Submit Changes\"]").click()
-	time.sleep(2)
+        time.sleep(2)
 
     def update_db(self, username, password, term, filename):
         # Scrapes course and section data for all subjects in the current term,
