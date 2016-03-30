@@ -18,15 +18,16 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.common.exceptions import NoSuchElementException
+from pyvirtualdisplay import Display
 
 class MyBamaChecker(object):
 
     def __init__(self, headless=False):
         if headless:
-            self.driver = webdriver.Remote("http://127.0.0.1:4444/wd/hub", DesiredCapabilities.HTMLUNITWITHJS)
-        else:
-            self.driver = webdriver.Firefox()
+            Display(visible=0, size=(2000, 1600)).start()
+        self.driver = webdriver.Firefox()
         self.driver.implicitly_wait(30)
+        self.driver.maximize_window()
 
     def login(self, username, password):
         self.driver.get("https://mybama.ua.edu/cp/home/displaylogin")
@@ -49,6 +50,61 @@ class MyBamaChecker(object):
         # Click on "Add or drop classes"
         self.driver.find_element(By.LINK_TEXT, "Add or drop classes").click()
         self.driver.switch_to.frame("content")
+
+    def click_hours(self):
+        self.driver.get("https://bnrsupport.ua.edu/CASSSO/action/wfsso")
+        self.driver.switch_to.frame("EntryFrame")
+        self.driver.find_element(By.ID, "ext-gen15").click()
+
+    def enter_hours(self, day_blacklist, hours):
+        self.driver.switch_to.frame("EntryFrame")
+        for num in [186,187]:
+            days_input = 0
+            table = self.driver.find_element(By.XPATH, "//table[@id='ext-gen" + str(num) + "']")
+            row = table.find_element(By.XPATH, "./tbody[2]/tr[1]")
+            # Skip the week if hours have already been put in.
+            if "unpopulated" not in row.get_attribute("class"):
+                continue
+            for i in range(7): # for each day of the week
+                dayRow = table.find_element(By.XPATH, "./tbody["+str(i+1)+"]")
+                # Skip the day if it's been blacklisted.
+                if dayRow.find_element(By.XPATH, "./tr[1]/td[1]").get_attribute("title").split(" ")[1] in day_blacklist:
+                    continue
+                else:
+                    days_input += 1
+                ActionChains(self.driver).move_to_element(dayRow).perform()
+                dayHours = hours[i]
+                for i, shift in enumerate(dayHours):
+                    time.sleep(1)
+                    if i > 0:
+                        # click + button to add a row
+                        dayRow.find_element(By.XPATH, "./tr[1]/td[2]/img").click()
+                        time.sleep(1)
+                    shiftRow = dayRow.find_element(By.XPATH, "./tr["+str(2*i+1)+"]")
+                    start = shiftRow.find_element(By.XPATH, "./td["+("5" if i>0 else "6")+"]/div[2]/div[1]/input")
+                    self.click_body()
+                    ActionChains(self.driver).move_to_element(dayRow).perform()
+                    start.clear()
+                    start.send_keys(shift.split(",")[0])
+                    self.click_body()
+                    time.sleep(1)
+                    end = shiftRow.find_element(By.XPATH, "./td["+("6" if i>0 else "7")+"]/div[2]/div[1]/input")
+                    self.click_body()
+                    ActionChains(self.driver).move_to_element(end).click().perform()
+                    end.clear()
+                    end.send_keys(shift.split(",")[1])
+                    self.click_body()
+            if days_input > 0: break # only do the first week if it succeeded
+
+    def save_hours(self):
+        saveButton = self.driver.find_element(By.ID, "ext-gen64")
+        ActionChains(self.driver).move_to_element(saveButton).click().perform()
+        time.sleep(3)
+
+    def click_body(self):
+        body = self.driver.find_element(By.XPATH, "/html/body")
+        body.click()
+        body.send_keys(Keys.ESCAPE)
 
     def select_term_search(self, term):
         # takes a term (such as "Fall 2014") as input, selects it, and submits the form
