@@ -18,7 +18,7 @@ COURSE = sys.argv[5] # "102" for example
 SECTION = sys.argv[6] # "005" for example
 
 def main():
-    crawler = MyBamaChecker()
+    crawler = MyBamaChecker(True)
     try:
         crawler.login(USERNAME, PASSWORD)
     except Exception as e:

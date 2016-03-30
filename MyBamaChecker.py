@@ -21,9 +21,11 @@ from selenium.common.exceptions import NoSuchElementException
 
 class MyBamaChecker(object):
 
-    def __init__(self):
-        #self.driver = webdriver.Firefox()
-        self.driver = webdriver.Remote("http://127.0.0.1:4444/wd/hub", DesiredCapabilities.HTMLUNITWITHJS)
+    def __init__(self, headless=False):
+        if headless:
+            self.driver = webdriver.Remote("http://127.0.0.1:4444/wd/hub", DesiredCapabilities.HTMLUNITWITHJS)
+        else:
+            self.driver = webdriver.Firefox()
         self.driver.implicitly_wait(30)
 
     def login(self, username, password):

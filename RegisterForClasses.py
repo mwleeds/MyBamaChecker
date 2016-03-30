@@ -16,7 +16,7 @@ TERM = sys.argv[3] # "Fall 2014" for example
 CRNS = sys.argv[4:] # ['45970', '45124', '44405', '44225'] for example
 
 def main():
-    crawler = MyBamaChecker()
+    crawler = MyBamaChecker(True)
     try:
         crawler.login(USERNAME, PASSWORD)
     except Exception as e:
