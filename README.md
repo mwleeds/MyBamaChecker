@@ -31,9 +31,16 @@ To enter hours for the week as an employee:
 $ python3 EnterHours.py username password
 ```
 
+To enter the football ticket lottery at 1 PM:
+```
+$ python3 GetTickets.py username password
+```
+
 ## Notes
 
-You can of course use crontab to periodically run these commands without human intervention.
+* You can of course use crontab to periodically run these commands without human intervention.
 
-These commands should work on Windows but have only been tested on Linux.
+* These commands should work on Windows but have only been tested on Linux.
+
+* If you pass your password on the command line (rather than editing the scripts), it may be saved by your shell (in the ~/.bash_history file for Bash) which is obviously a security risk.
 
