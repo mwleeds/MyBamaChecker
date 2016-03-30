@@ -9,7 +9,6 @@ __author__='mwleeds'
 from MyBamaChecker import MyBamaChecker
 import sys
 
-# constants
 USERNAME = sys.argv[1]
 PASSWORD = sys.argv[2]
 TERM = sys.argv[3] # "Fall 2014" for example

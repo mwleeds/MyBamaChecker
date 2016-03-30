@@ -1,16 +1,19 @@
 #!/usr/bin/python3
 
-# Purpose: Class used to log in to mybama.ua.edu and check class 
-# registration information automatically. Assumes selenium is 
-# installed and a selenium server is running if you want to use 
-# an htmlunit instead of FF/Chrome. To get a selenium server
-# instance going run "java -jar selenium-server-standalone-....jar"
+# Purpose: Class used to log in to mybama.ua.edu and perform various
+# functions such as registering for classes or entering the football
+# ticket lottery. See the README for more info.
+
+#TODO add more docstrings
+#TODO organize the methods better
+#TODO remove some debug statements and commented code
 
 __author__='mwleeds'
 
 import sys
 import time
 import json
+import timeit
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -214,6 +217,34 @@ class MyBamaChecker(object):
             self.select_term(term)
             self.driver.switch_to_default_content()
             self.driver.switch_to.frame("content")
+
+    def click_my_tickets(self):
+        self.driver.find_element(By.ID, "myticketslink").click() 
+        self.driver.switch_to.frame("content")
+
+    def refresh(self):
+        self.driver.refresh()
+    
+    def request_tickets(self): 
+        requestButton = self.driver.find_element(By.XPATH, "/html/body/div[3]/form/input[6]")
+        if requestButton.get_attribute("value") == "Request Ticket":
+            requestButton.click()
+            self.driver.switch_to_alert().accept()
+
+    def test_speed(self):
+        experimentalTimes = []
+        for i in range(50):
+            before = timeit.default_timer()
+            self.driver.find_element(By.XPATH, "/html/body/div[3]/form/input[6]")
+            #self.driver.find_element(By.CSS_SELECTOR, "body > div.pagebodydiv > form > input[type='submit']:nth-child(6)")
+            after = timeit.default_timer()
+            experimentalTimes.append(after - before)
+            self.driver.switch_to_default_content()
+            self.driver.switch_to.frame("nav")
+            self.driver.find_element(By.CSS_SELECTOR, "#backto > a:nth-child(1)").click()
+            self.driver.find_element(By.ID, "myticketslink").click() 
+            self.driver.switch_to.frame("content")
+        return experimentalTimes
 
     def __del__(self):
         self.driver.quit()
