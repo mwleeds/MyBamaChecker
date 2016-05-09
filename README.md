@@ -36,6 +36,11 @@ To enter the football ticket lottery at 1 PM:
 $ python3 GetTickets.py username password
 ```
 
+To check if any final grades have been updated since the last run of this script:
+```
+$ python3 CheckGrades.py username password
+```
+
 ## Notes
 
 * You can of course use crontab to periodically run these commands without human intervention.
@@ -43,4 +48,6 @@ $ python3 GetTickets.py username password
 * These commands should work on Windows but have only been tested on Linux.
 
 * If you pass your password on the command line (rather than editing the scripts), it may be saved by your shell (in the ~/.bash_history file for Bash) which is obviously a security risk.
+
+* If you run these on a mail server you can use the output of these scripts to send yourself notifications.
 

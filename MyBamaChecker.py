@@ -6,7 +6,6 @@
 
 #TODO add more docstrings
 #TODO organize the methods better
-#TODO remove some debug statements and commented code
 
 __author__='mwleeds'
 
@@ -43,6 +42,38 @@ class MyBamaChecker(object):
         if "Failed Login" in self.driver.page_source:
             raise Exception("ERROR: Invalid login credentials.")
             return
+
+    def click_student(self):
+        self.driver.find_element(By.LINK_TEXT, "Student").click()
+
+    def view_grades(self):
+        self.driver.find_element(By.LINK_TEXT, "Student Services").click()
+        self.driver.find_element(By.LINK_TEXT, "Student Records").click()
+        self.driver.find_element(By.LINK_TEXT, "Final Grades").click()
+        self.driver.switch_to.frame("content")
+
+    def new_grades_posted(self):
+        grades = {}
+        try:
+            with open('grades.json') as f:
+                grades = json.load(f)
+        except FileNotFoundError:
+            pass
+        table = self.driver.find_element(By.CSS_SELECTOR, "table.datadisplaytable:nth-child(4)")
+        rows = table.find_elements(By.XPATH, "./tbody/tr")
+        new = False
+        for i, row in enumerate(rows):
+            if i == 0 or i == len(rows) - 1: continue
+            crn = row.find_element(By.XPATH, "./td[1]").text
+            grade = row.find_element(By.XPATH, "./td[6]").text
+            if crn not in grades:
+                grades[crn] = grade
+            elif grades[crn] != grade:
+                new = True
+                grades[crn] = grade
+        with open('grades.json', 'w') as f:
+            json.dump(grades, f)
+        return new
 
     def click_look_up_classes(self):
         # Click on "Look up classes"
@@ -209,7 +240,6 @@ class MyBamaChecker(object):
             outFile.write("\n")
             outFile.close()
             # log out and back in to prevent a time-out
-            #print("relogging")
             self.driver.switch_to_default_content()
             self.driver.switch_to.frame("nav")
             self.driver.find_element(By.XPATH, "/html/body/table/tbody/tr[1]/td/table[2]/tbody/tr[2]/td[11]/a/img").click()
@@ -224,6 +254,7 @@ class MyBamaChecker(object):
 
     def refresh(self):
         self.driver.refresh()
+        self.driver.switch_to.frame("content")
     
     def request_tickets(self): 
         requestButton = self.driver.find_element(By.XPATH, "/html/body/div[3]/form/input[6]")
@@ -236,7 +267,6 @@ class MyBamaChecker(object):
         for i in range(50):
             before = timeit.default_timer()
             self.driver.find_element(By.XPATH, "/html/body/div[3]/form/input[6]")
-            #self.driver.find_element(By.CSS_SELECTOR, "body > div.pagebodydiv > form > input[type='submit']:nth-child(6)")
             after = timeit.default_timer()
             experimentalTimes.append(after - before)
             self.driver.switch_to_default_content()
