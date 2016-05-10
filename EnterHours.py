@@ -1,22 +1,23 @@
 #!/usr/bin/python3
 
-# Usage: $ python3 EnterHours.py username password
-# Purpose: Enter worked hours for the week into the Workforce system.
+# This script enters the hours configured in config.ini into the Workforce system.
+# See the README for more information.
 
 __author__='mwleeds'
 
+import json
+from configparser import ConfigParser
 from MyBamaChecker import MyBamaChecker
-import sys
-
-USERNAME = sys.argv[1]
-PASSWORD = sys.argv[2]
-# HOURS is a list of lists of strings starting with Sunday
-HOURS = [["12:00 pm,3:30pm"], ["8:00am,10:30am"], ["12:30pm,3:00pm"], ["1:00pm,5:00pm"], ["12:30pm,4:00pm"], ["1:00pm,5:00pm"], []]
-# BLACKLIST is a list of "MM/DD" dates that shouldn't have hours input.
-BLACKLIST = ["03/13", "03/14", "03/15", "03/16", "03/17", "03/18", "03/19"]
 
 def main():
-    crawler = MyBamaChecker(False) # use True on headless machines
+    config = ConfigParser()
+    config.read('config.ini')
+    USERNAME = config.get('ENTER_HOURS', 'USERNAME')
+    PASSWORD = config.get('ENTER_HOURS', 'PASSWORD')
+    HEADLESS = config.getboolean('ENTER_HOURS', 'HEADLESS')
+    HOURS = json.loads(config.get('ENTER_HOURS', 'HOURS'))
+    BLACKLIST = json.loads(config.get('ENTER_HOURS', 'BLACKLIST'))
+    crawler = MyBamaChecker(HEADLESS)
     crawler.login(USERNAME, PASSWORD)
     crawler.click_hours()
     crawler.enter_hours(BLACKLIST, HOURS)

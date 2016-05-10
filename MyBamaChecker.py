@@ -20,12 +20,12 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.common.exceptions import NoSuchElementException
-from pyvirtualdisplay import Display
 
 class MyBamaChecker(object):
 
     def __init__(self, headless=False):
         if headless:
+            from pyvirtualdisplay import Display
             Display(visible=0, size=(2000, 1600)).start()
         self.driver = webdriver.Firefox()
         self.driver.implicitly_wait(30)
@@ -261,20 +261,6 @@ class MyBamaChecker(object):
         if requestButton.get_attribute("value") == "Request Ticket":
             requestButton.click()
             self.driver.switch_to_alert().accept()
-
-    def test_speed(self):
-        experimentalTimes = []
-        for i in range(50):
-            before = timeit.default_timer()
-            self.driver.find_element(By.XPATH, "/html/body/div[3]/form/input[6]")
-            after = timeit.default_timer()
-            experimentalTimes.append(after - before)
-            self.driver.switch_to_default_content()
-            self.driver.switch_to.frame("nav")
-            self.driver.find_element(By.CSS_SELECTOR, "#backto > a:nth-child(1)").click()
-            self.driver.find_element(By.ID, "myticketslink").click() 
-            self.driver.switch_to.frame("content")
-        return experimentalTimes
 
     def __del__(self):
         self.driver.quit()

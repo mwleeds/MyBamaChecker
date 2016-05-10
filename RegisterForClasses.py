@@ -1,28 +1,26 @@
 #!/usr/bin/python3
 
-# Usage: $ python3 RegisterForClasses.py username password "term" crn1 crn2 ...
-# Purpose: Register for all the classes specified by the Course
-# Registration Numbers passed on the command line.
+# This script registers for the classes specified in config.ini.
+# See the README for more information.
 
 __author__='mwleeds'
 
+import json
+from configparser import ConfigParser
 from MyBamaChecker import MyBamaChecker
-import sys
-
-USERNAME = sys.argv[1]
-PASSWORD = sys.argv[2]
-TERM = sys.argv[3] # "Fall 2014" for example
-CRNS = sys.argv[4:] # ['45970', '45124', '44405', '44225'] for example
 
 def main():
-    crawler = MyBamaChecker(True)
-    try:
-        crawler.login(USERNAME, PASSWORD)
-    except Exception as e:
-        print(e)
-        return
+    config = ConfigParser()
+    config.read('config.ini')
+    USERNAME = config.get('REGISTER_FOR_CLASSES', 'USERNAME')
+    PASSWORD = config.get('REGISTER_FOR_CLASSES', 'PASSWORD')
+    SEMESTER = config.get('REGISTER_FOR_CLASSES', 'SEMESTER')
+    HEADLESS = config.getboolean('REGISTER_FOR_CLASSES', 'HEADLESS')
+    CRNS = json.loads(config.get('REGISTER_FOR_CLASSES', 'CRNS'))
+    crawler = MyBamaChecker(HEADLESS)
+    crawler.login(USERNAME, PASSWORD)
     crawler.click_add_or_drop_classes()
-    crawler.select_term_registration(TERM)
+    crawler.select_term_registration(SEMESTER)
     crawler.register_for_CRNs(CRNS)
 
 if __name__=="__main__":

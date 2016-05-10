@@ -1,26 +1,29 @@
 #!/usr/bin/python3
 
-# Usage: $ python3 GetTickets.py username password
-# Purpose: Login to mybama.ua.edu, refresh until the football ticket lottery
-# is open (1 PM), and enter in it. Note that the code is naive to timezones.
+# This script logs in to mybama.ua.edu and refreshes the page just before
+# the football ticket lottery opens at 1 PM, and enters it.
+# Note that the code is naive to concept of timezones.
+# See the README for more information.
 
 __author__='mwleeds'
 
-from MyBamaChecker import MyBamaChecker
 from datetime import datetime
 from time import sleep
-import sys
-
-USERNAME = sys.argv[1]
-PASSWORD = sys.argv[2]
+from configparser import ConfigParser
+from MyBamaChecker import MyBamaChecker
 
 def main():
+    config = ConfigParser()
+    config.read('config.ini')
+    USERNAME = config.get('GET_TICKETS', 'USERNAME')
+    PASSWORD = config.get('GET_TICKETS', 'PASSWORD')
+    HEADLESS = config.getboolean('GET_TICKETS', 'HEADLESS')
     now = datetime.now()
     future = now.replace(hour=12, minute=58, second=0, microsecond=0)
     delta_t = future - now
     print("opening browser in " + str(delta_t.seconds) + " seconds...")
     sleep(delta_t.seconds)
-    crawler = MyBamaChecker(True)
+    crawler = MyBamaChecker(HEADLESS)
     crawler.login(USERNAME, PASSWORD)
     crawler.click_my_tickets()
     now = datetime.now()
