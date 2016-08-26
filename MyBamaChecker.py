@@ -34,14 +34,19 @@ class MyBamaChecker(object):
     def login(self, username, password):
         self.driver.get("https://mybama.ua.edu/cp/home/displaylogin")
         # log in
-        self.driver.find_element(By.ID, "user").clear()
-        self.driver.find_element(By.ID, "user").send_keys(username)
-        self.driver.find_element(By.NAME, "pass").clear()
-        self.driver.find_element(By.NAME, "pass").send_keys(password)
-        self.driver.find_element(By.LINK_TEXT, "Sign In").click()
-        if "Failed Login" in self.driver.page_source:
-            raise Exception("ERROR: Invalid login credentials.")
-            return
+        self.driver.find_element(By.ID, "username").clear()
+        self.driver.find_element(By.ID, "username").send_keys(username)
+        self.driver.find_element(By.NAME, "password").clear()
+        self.driver.find_element(By.NAME, "password").send_keys(password)
+        self.driver.find_element(By.ID, "button").click()
+
+        # Periodically check if the login was successful;
+        # this should give the user time to do 2FA
+        for i in range(20):
+            time.sleep(1)
+            if self.driver.current_url.startswith("https://mybama.ua.edu"):
+                return
+        raise Exception("ERROR: Invalid login credentials.")
 
     def click_student(self):
         self.driver.find_element(By.LINK_TEXT, "Student").click()
@@ -87,15 +92,19 @@ class MyBamaChecker(object):
 
     def click_hours(self):
         self.driver.get("https://bnrsupport.ua.edu/CASSSO/action/wfsso")
-        self.driver.switch_to.frame("EntryFrame")
+        time.sleep(2)
+        self.driver.switch_to.default_content()
+        self.driver.switch_to.frame(1)
         self.driver.find_element(By.ID, "ext-gen15").click()
 
     def enter_hours(self, day_blacklist, hours):
-        self.driver.switch_to.frame("EntryFrame")
-        for num in [186,187]:
+        time.sleep(2)
+        self.driver.switch_to.default_content()
+        self.driver.switch_to.frame(1)
+        for num in [188,189]:
             days_input = 0
             table = self.driver.find_element(By.XPATH, "//table[@id='ext-gen" + str(num) + "']")
-            row = table.find_element(By.XPATH, "./tbody[2]/tr[1]")
+            row = table.find_element(By.XPATH, "./tbody[1]/tr[1]")
             # Skip the week if hours have already been put in.
             if "unpopulated" not in row.get_attribute("class"):
                 continue
