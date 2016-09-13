@@ -55,3 +55,4 @@ $ python3 CheckGrades.py
 
 * If you run these on a mail server you can use their output to trigger email notifications.
 
+:)
