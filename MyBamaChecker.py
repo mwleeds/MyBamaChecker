@@ -92,10 +92,15 @@ class MyBamaChecker(object):
 
     def click_hours(self):
         self.driver.get("https://bnrsupport.ua.edu/CASSSO/action/wfsso")
-        time.sleep(2)
+        time.sleep(4)
         self.driver.switch_to.default_content()
         self.driver.switch_to.frame(1)
+        time.sleep(1)
         self.driver.find_element(By.ID, "ext-gen15").click()
+        time.sleep(2)
+        self.driver.switch_to.frame(1)
+        # Close the bottom panel so the screen isn't too cramped
+        self.driver.find_element(By.ID, "ext-gen186").click()
 
     def enter_hours(self, day_blacklist, hours):
         time.sleep(2)
@@ -129,6 +134,7 @@ class MyBamaChecker(object):
                     ActionChains(self.driver).move_to_element(dayRow).perform()
                     start.clear()
                     start.send_keys(shift.split(",")[0])
+                    time.sleep(1)
                     self.click_body()
                     time.sleep(1)
                     end = shiftRow.find_element(By.XPATH, "./td["+("6" if i>0 else "7")+"]/div[2]/div[1]/input")
@@ -136,6 +142,7 @@ class MyBamaChecker(object):
                     ActionChains(self.driver).move_to_element(end).click().perform()
                     end.clear()
                     end.send_keys(shift.split(",")[1])
+                    time.sleep(1)
                     self.click_body()
             if days_input > 0: break # only do the first week if it succeeded
 
