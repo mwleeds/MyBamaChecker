@@ -28,7 +28,7 @@ class MyBamaChecker(object):
             from pyvirtualdisplay import Display
             Display(visible=0, size=(2000, 1600)).start()
         self.driver = webdriver.Firefox()
-        self.driver.implicitly_wait(30)
+        self.driver.implicitly_wait(60)
         self.driver.maximize_window()
 
     def login(self, username, password):
