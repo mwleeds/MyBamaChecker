@@ -1,6 +1,6 @@
 # MyBamaChecker
 
-These scripts can be used to automate various tasks on the University of Alabama's 
+These scripts can be used to automate various tasks on the University of Alabama's
 student/employee portal, MyBama (which uses Banner software). The MyBamaChecker class
 is where all the interesting code is; other files just call methods in that.
 

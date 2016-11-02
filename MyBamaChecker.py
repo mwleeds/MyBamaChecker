@@ -178,9 +178,9 @@ class MyBamaChecker(object):
             if courseElem.text == course:
                 form = courseElem.find_element(By.XPATH, "../td[3]/form")
         form.find_element(By.CSS_SELECTOR, "input[type='submit']").click()
-    
+
     def get_section_avail(self, section):
-        # takes a section number (such as "005") as input and 
+        # takes a section number (such as "005") as input and
         # returns the number of spots available in that section
         rows = self.driver.find_elements(By.XPATH, "//tr")
         for row in rows:
@@ -265,14 +265,14 @@ class MyBamaChecker(object):
             self.driver.switch_to.frame("content")
 
     def click_my_tickets(self):
-        self.driver.find_element(By.ID, "myticketslink").click() 
+        self.driver.find_element(By.ID, "myticketslink").click()
         self.driver.switch_to.frame("content")
 
     def refresh(self):
         self.driver.refresh()
         self.driver.switch_to.frame("content")
-    
-    def request_tickets(self): 
+
+    def request_tickets(self):
         requestButton = self.driver.find_element(By.XPATH, "/html/body/div[3]/form/input[6]")
         if requestButton.get_attribute("value") == "Request Ticket":
             requestButton.click()

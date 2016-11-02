@@ -32,7 +32,7 @@ def main():
     print("refreshing in " + str(delta_t.seconds) + " seconds...")
     sleep(delta_t.seconds)
     crawler.refresh()
-    crawler.request_tickets() 
+    crawler.request_tickets()
 
 if __name__=="__main__":
     main()
