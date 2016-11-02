@@ -24,7 +24,7 @@ def main():
     crawler.select_term_search(SEMESTER)
     crawler.select_subject(SUBJECT)
     crawler.select_course(COURSE_NUMBER)
-    print(crawler.get_section_avail(SECTION_NUMBER))
+    print(crawler.get_section_avail(COURSE_SECTION))
 
 if __name__=="__main__":
     main()
