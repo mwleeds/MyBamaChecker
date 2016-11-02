@@ -83,7 +83,7 @@ class MyBamaChecker(object):
     def click_look_up_classes(self):
         # Click on "Look up classes"
         self.driver.find_element(By.LINK_TEXT, "Look up classes").click()
-        self.driver.switch_to.frame("content")
+        self.driver.switch_to_window(self.driver.window_handles[-1])
 
     def click_add_or_drop_classes(self):
         # Click on "Add or drop classes"
